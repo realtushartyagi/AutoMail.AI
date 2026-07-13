@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = []
+  engineType      = "library"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model EmailEntry {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  hrEmail     String
+  companyName String?
+  role        String
+  emailType   String    // "REFERRAL", "APPLICATION", "INTEREST", "FOLLOWUP"
+  name        String?   // Recipient Name
+  jobId       String?   // Job ID for referrals
+  messageId   String?   // Store SMTP Message-ID for thread replies
+  status        String    @default("PENDING") // "PENDING", "SENT", "FAILED"
+  source        String    @default("MANUAL")  // "MANUAL", "WHATSAPP", "LINKEDIN"
+  reviewStatus  String    @default("AUTO")    // "AUTO", "PENDING_REVIEW", "APPROVED"
+  rawText       String?
+  scheduledAt   DateTime  @default(now())
+  lastSentAt    DateTime?
+  retryCount    Int       @default(0)
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  logs EmailLog[]
+}
+
+model EmailTemplate {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type      String   @unique // "REFERRAL", "APPLICATION", "INTEREST", "FOLLOWUP"
+  subject   String
+  body      String   // supports variables like {{company}}, {{role}}
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EmailLog {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  emailEntryId String     @db.ObjectId
+  status       String     // "SUCCESS", "FAILURE"
+  response     String?
+  timestamp    DateTime   @default(now())
+
+  emailEntry EmailEntry @relation(fields: [emailEntryId], references: [id], onDelete: Cascade)
+}
+
+model AppSetting {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  key   String @unique
+  value String
+}
+
+model Resume {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  driveUrl    String
+  uploadedAt  DateTime @default(now())
+}
