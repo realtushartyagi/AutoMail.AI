@@ -21,8 +21,8 @@ async function main() {
 
   const interestHtml = `<p>Hi {{name}},</p>
 <p>I hope you are doing well.</p>
-<p>I’m Tushar Tyagi, a Full-Stack & AI developer and an Open Source Contributor with experience in MERN, Next.js, ThreeJS, Docker, and backend systems.</p>
-<p>I have two remote internship experiences working on full-stack applications, along with building real-time and AI-driven projects like Nuora and ChatNova.</p>
+<p>I’m Tushar Tyagi, a Full-Stack & AI developer, Mobile Application Developer and an Open Source Contributor with experience in MERN, Next.js, ThreeJS, ReactNative, Docker, and backend systems.</p>
+<p>I have two remote internship experiences working on full-stack applications, along with building real-time and AI-driven projects like Nuora, NovaAI and Kinetic.</p>
 <p>I am exploring new software development opportunities and would love to know if there are any openings on your team at {{company}}.</p>
 <p>Please find my resume attached. I look forward to connecting!</p>
 <p>Best regards,<br>Tushar Tyagi</p>`;

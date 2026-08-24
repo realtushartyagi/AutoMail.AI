@@ -6,8 +6,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// Run at 9:00 AM IST (3:30 AM UTC), Monday to Thursday
-cron.schedule("30 3 * * 1-4", async () => {
+async function runCronJob() {
   try {
     const setting = await prisma.appSetting.findUnique({ where: { key: "cron_active" } });
     const active = !setting || setting.value !== "false";
@@ -119,6 +118,14 @@ cron.schedule("30 3 * * 1-4", async () => {
   } catch (error) {
     console.error("Cron script error:", error);
   }
+}
+
+// Run immediately upon starting the script
+console.log("Starting email script. Sending the first batch of emails immediately...");
+runCronJob().then(() => {
+  console.log("Initial batch finished.");
 });
 
-console.log("Cron job scheduled: Runs at 9:00 AM, Monday to Thursday.");
+// Run at 9:00 AM IST (3:30 AM UTC), Monday to Thursday
+cron.schedule("30 3 * * 1-4", runCronJob);
+console.log("Cron job scheduled: Will also run automatically at 9:00 AM, Monday to Thursday.");
